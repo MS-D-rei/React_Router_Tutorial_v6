@@ -5,12 +5,17 @@ import { Root } from '@/components/routes/root';
 // import App from './App'
 import './index.css';
 import ErrorPage from './components/ErrorPage';
+import Contact from './components/Contact';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: 'contacts/:contactId',
+    element: <Contact />,
   },
 ]);
 
