@@ -109,3 +109,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
    export interface LoaderFunctionArgs extends DataFunctionArgs {}
 */
 ```
+
+## useNavigation
+Returns the current navigation, defaulting to an "idle" navigation when no navigation is in progress
+```ts
+// root.tsx
+export default function Root() {
+  const navigation = useNavigation(); // const navigation: Navigation
+  // status idle example
+  /* {state: "idle", location: undefined, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined } */
+  // status loading example
+  /* {state: "loading", location: {pathname: '/contacts/1sslh8s', search: '', hash: '', state: null, key: '5w1p5ke8'}, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined */
+}
+```
