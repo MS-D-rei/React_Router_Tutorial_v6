@@ -92,3 +92,16 @@ export const router = createBrowserRoute([
   }
 ])
 ```
+
+## LoaderFunctionArgs and ActionFunctionArgs type checking
+```ts
+// Contact.tsx
+import { LoaderFunctionArgs } from 'react-router-dom'
+export async function loader({params}: LoaderFunctionArgs) {
+  return getContact(params.contactId);
+}
+// utils.d.ts
+/* Arguments passed to loader functions
+   export interface LoaderFunctionArgs extends DataFunctionArgs {}
+*/
+```

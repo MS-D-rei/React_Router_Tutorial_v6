@@ -1,8 +1,20 @@
-import { Form } from 'react-router-dom';
-import { contact } from '@/components/ContactData';
+import { Form, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
+import { ContactType } from '@/components/ContactData';
 import Favorite from '@/components/Favorite';
+import { getContact } from './Contacts';
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  /*
+    This loader func gets the arg below
+    {params: {contactId: '1sslh8s'}, request: Request {method: 'GET', url: 'http://localhost:5173/contacts/1sslh8s', headers: Headers, destination: '', referrer: 'about:client', …}
+  */
+  console.log(params);
+  /* {contactId: '1sslh8s'} */
+  return getContact(params.contactId);
+}
 
 export default function Contact() {
+  const contact = useLoaderData() as ContactType;
   return (
     <div id="contact">
       <div>
@@ -36,7 +48,7 @@ export default function Contact() {
             <button type="submit">Edit</button>
           </Form>
           <Form
-            method='post'
+            method="post"
             action="destroy"
             onSubmit={(event) => {
               if (!confirm('Please confirm you want to delete this record.')) {
