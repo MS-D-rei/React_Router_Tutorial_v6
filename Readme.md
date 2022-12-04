@@ -69,6 +69,7 @@ react-router-dom Form component
 1. Browser serializes the form's data as the same above
 2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
 3. Use not sending data to the server as a hint to revalidate the data on the page.
+=> Destroy action below is a good example.
 ```ts
 // root.tsx
 export async function action() {
@@ -121,4 +122,54 @@ export default function Root() {
   // status loading example
   /* {state: "loading", location: {pathname: '/contacts/1sslh8s', search: '', hash: '', state: null, key: '5w1p5ke8'}, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined */
 }
+```
+
+## Destroy action
+react-router-dom Form component
+1. Browser serializes the form's data as the same above
+2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
+3. Use not sending data to the server as a hint to revalidate the data on the page.
+```ts
+// Contact.tsx, Form send the serialized data to action 'destroy'
+// relative path is 'contacts/contactId', so this data will be submitted to 'contacts/contactId/destory'
+<Form method="post" action="destroy" onSubmit={(event) => {
+  if (!confirm('Please confirm you want to delete this record.')) { 
+    event.preventDefault();
+  }
+}}
+>
+  <button type="submit">Delete</button>
+</Form>
+
+// router.tsx, catch the data with path: 'contacts/:contactId/destroy'
+// action: destroyAction will be executed.
+export const router = createBrowserRouter([
+    {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      // other codes
+      {
+        path: 'contacts/:contactId/destroy',
+        action: destroyAction,
+      },
+    ],
+  },
+])
+
+// Destroy.tsx
+export async function destroyAction({ params }: ActionFunctionArgs) {
+  await deleteContact(params.contactId);
+  return redirect('/');
+  // => after redirect, React Router calls all of the loaders for data on the page.
+}
+
+// root.tsx
+// navigation content
+/* {state: "submitting", location: {pathname: '/contacts/7v3xzj0/destroy', search: '', hash: '', state: null, key: 'i5lpfz45'} formAction: "/contacts/7v3xzj0/destroy", formData: FormData {}, formEncType: "application/x-www-form-urlencoded", formMethod: "post"} */
+
+
 ```
