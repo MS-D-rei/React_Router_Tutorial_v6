@@ -38,7 +38,7 @@ const router = useRouteError() as RouteError; // set type with 'as'
 {error.statusText;} // => 'Not Found'
 ```
 
-## <Form> component from 'react-router-dom'
+## 'Form' component from 'react-router-dom'
 
 ```ts
 <Form
