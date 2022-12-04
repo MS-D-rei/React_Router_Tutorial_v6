@@ -70,15 +70,25 @@ react-router-dom Form component
 2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
 
 ```ts
-<Form
-  method="post" // Supports 'get', 'post', 'put', 'delete', 'patch'
-  action="destroy"
-  onSubmit={(event) => { // By default set event: React.FormEvent<HTMLFormElement> 
-    if (!confirm('Please confirm you want to delete this record.')) {
-      event.preventDefault();
-    }
-  }}
->
-  <button type="submit">Delete</button>
-</Form>
+// root.tsx
+export async function action() {
+  await createContact();
+}
+
+export default Root() {
+  return (
+    <Form method="post">
+      <button type="submit">New</button> // when click this button, data will be sent to 'action' in router.tsx
+    </Form>
+  )
+}
+
+// router.tsx
+import { action as rootAction,} from '@/components/routes/root';
+export const router = createBrowserRoute([
+  {
+    // other codes,
+    action: rootAction,
+  }
+])
 ```
