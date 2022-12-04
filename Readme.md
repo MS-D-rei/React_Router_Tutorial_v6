@@ -68,7 +68,7 @@ HTML form
 react-router-dom Form component
 1. Browser serializes the form's data as the same above
 2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
-
+3. Use not sending data to the server as a hint to revalidate the data on the page.
 ```ts
 // root.tsx
 export async function action() {
@@ -97,9 +97,13 @@ export const router = createBrowserRoute([
 ```ts
 // Contact.tsx
 import { LoaderFunctionArgs } from 'react-router-dom'
-export async function loader({params}: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   return getContact(params.contactId);
 }
+/* This loader func gets the arg below
+  {params: {contactId: '1sslh8s'}, request: Request {method: 'GET', url: 'http://localhost:5173/contacts/1sslh8s', 
+  headers: Headers, destination: '', referrer: 'about:client', …}
+*/
 // utils.d.ts
 /* Arguments passed to loader functions
    export interface LoaderFunctionArgs extends DataFunctionArgs {}

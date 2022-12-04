@@ -1,9 +1,19 @@
-import { Form, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
-import { getContact } from '@/components/Contacts';
+import { ActionFunctionArgs, Form, LoaderFunctionArgs, redirect, useLoaderData } from 'react-router-dom';
+import { getContact, updateContact } from '@/components/Contacts';
 import { ContactType } from '@/components/ContactData';
 
 export async function editLoader({ params }: LoaderFunctionArgs) {
   return getContact(params.contactId);
+}
+
+export async function editAction({request, params}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  console.log(formData);
+  const updates = Object.fromEntries(formData);
+  // console.log(updates);
+  /* {first: 'John', last: 'Due', twitter: 'twitter.comcom', avatar: '', notes: ''} */
+  await updateContact(params.contactId, updates);
+  return redirect(`/contacts/${params.contactId}`);
 }
 
 export default function EditContact() {

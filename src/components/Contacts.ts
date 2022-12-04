@@ -23,18 +23,18 @@ export async function createContact() {
   return contact;
 }
 
-export async function getContact(id: any) {
+export async function getContact(id: string | undefined) {
   await fakeNetwork(`contact:${id}`);
   let contacts = await localforage.getItem("contacts");
   let contact = contacts.find((contact: { id: any; }) => contact.id === id);
   return contact ?? null;
 }
 
-export async function updateContact(id: ErrorOptions | undefined, updates: any) {
+export async function updateContact(id: string | undefined, updates: any) {
   await fakeNetwork();
   let contacts = await localforage.getItem("contacts");
   let contact = contacts.find((contact: { id: any; }) => contact.id === id);
-  if (!contact) throw new Error("No contact found for", id);
+  if (!contact) throw new Error(`No contact found for, ${id}`);
   Object.assign(contact, updates);
   await set(contacts);
   return contact;
@@ -58,7 +58,7 @@ function set(contacts: unknown) {
 // fake a cache so we don't slow down stuff we've already seen
 let fakeCache = {};
 
-async function fakeNetwork(key: string | undefined) {
+async function fakeNetwork(key?: string) {
   if (!key) {
     fakeCache = {};
   }
