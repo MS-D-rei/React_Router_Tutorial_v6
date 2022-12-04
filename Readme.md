@@ -38,22 +38,6 @@ const router = useRouteError() as RouteError; // set type with 'as'
 {error.statusText;} // => 'Not Found'
 ```
 
-## 'Form' component from 'react-router-dom'
-
-```ts
-<Form
-  method="post" // Supports 'get', 'post', 'put', 'delete', 'patch'
-  action="destroy"
-  onSubmit={(event) => { // By default set event: React.FormEvent<HTMLFormElement> 
-    if (!confirm('Please confirm you want to delete this record.')) {
-      event.preventDefault();
-    }
-  }}
->
-  <button type="submit">Delete</button>
-</Form>
-```
-
 ## useLoaderData is used to pass data through loader prop in router
 ```ts
 // root.tsx, make loader function
@@ -74,4 +58,27 @@ export default function Root() {
   // useLoaderData() returns 'unknown' type. <= export declare function useLoaderData(): unknown;
   const contacts = useLoaderData() as ContactType[];
 }
+```
+
+## 'Form' component from 'react-router-dom'
+The diff between HTML form and react-router-dom Form
+HTML form
+1. Browser serializes the form's data
+2. Send it to the server as the request body for 'POST'
+react-router-dom Form component
+1. Browser serializes the form's data as the same above
+2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
+
+```ts
+<Form
+  method="post" // Supports 'get', 'post', 'put', 'delete', 'patch'
+  action="destroy"
+  onSubmit={(event) => { // By default set event: React.FormEvent<HTMLFormElement> 
+    if (!confirm('Please confirm you want to delete this record.')) {
+      event.preventDefault();
+    }
+  }}
+>
+  <button type="submit">Delete</button>
+</Form>
 ```
