@@ -62,10 +62,11 @@ export default function Root() {
 
 ## 'Form' component from 'react-router-dom'
 The diff between HTML form and react-router-dom Form
-HTML form
+- #### HTML form
 1. Browser serializes the form's data
 2. Send it to the server as the request body for 'POST'
-react-router-dom Form component
+
+- #### react-router-dom Form component
 1. Browser serializes the form's data as the same above
 2. Don't send it to the server. Uses client side routing and send the data to a route 'action'
 3. Use not sending data to the server as a hint to revalidate the data on the page.
