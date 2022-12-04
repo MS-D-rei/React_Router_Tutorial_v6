@@ -1,14 +1,14 @@
 import { Form, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import { ContactType } from '@/components/ContactData';
 import Favorite from '@/components/Favorite';
-import { getContact } from './Contacts';
+import { getContact } from '@/components/Contacts';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   /*
     This loader func gets the arg below
     {params: {contactId: '1sslh8s'}, request: Request {method: 'GET', url: 'http://localhost:5173/contacts/1sslh8s', headers: Headers, destination: '', referrer: 'about:client', …}
   */
-  console.log(params);
+  // console.log(params);
   /* {contactId: '1sslh8s'} */
   return getContact(params.contactId);
 }

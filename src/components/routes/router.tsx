@@ -5,6 +5,7 @@ import Root, {
   loader as rootLoader,
   action as rootAction,
 } from '@/components/routes/root';
+import EditContact, { editLoader } from '@/components/Edit';
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ export const router = createBrowserRouter([
         path: 'contacts/:contactId',
         element: <Contact />,
         loader: contactLoader,
+      },
+      {
+        path: 'contacts/:contactId/edit',
+        element: <EditContact />,
+        loader: editLoader,
       },
     ],
   },
