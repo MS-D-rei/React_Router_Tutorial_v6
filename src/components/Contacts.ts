@@ -1,10 +1,11 @@
 import localforage from "localforage";
 import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
+import { ContactType } from "./ContactData";
 
-export async function getContacts(query) {
+export async function getContacts(query: string | undefined) {
   await fakeNetwork(`getContacts:${query}`);
-  let contacts = await localforage.getItem("contacts");
+  let contacts: ContactType[] | null = await localforage.getItem("contacts");
   if (!contacts) contacts = [];
   if (query) {
     contacts = matchSorter(contacts, query, { keys: ["first", "last"] });
@@ -22,26 +23,26 @@ export async function createContact() {
   return contact;
 }
 
-export async function getContact(id) {
+export async function getContact(id: any) {
   await fakeNetwork(`contact:${id}`);
   let contacts = await localforage.getItem("contacts");
-  let contact = contacts.find(contact => contact.id === id);
+  let contact = contacts.find((contact: { id: any; }) => contact.id === id);
   return contact ?? null;
 }
 
-export async function updateContact(id, updates) {
+export async function updateContact(id: ErrorOptions | undefined, updates: any) {
   await fakeNetwork();
   let contacts = await localforage.getItem("contacts");
-  let contact = contacts.find(contact => contact.id === id);
+  let contact = contacts.find((contact: { id: any; }) => contact.id === id);
   if (!contact) throw new Error("No contact found for", id);
   Object.assign(contact, updates);
   await set(contacts);
   return contact;
 }
 
-export async function deleteContact(id) {
+export async function deleteContact(id: any) {
   let contacts = await localforage.getItem("contacts");
-  let index = contacts.findIndex(contact => contact.id === id);
+  let index = contacts.findIndex((contact: { id: any; }) => contact.id === id);
   if (index > -1) {
     contacts.splice(index, 1);
     await set(contacts);
@@ -50,14 +51,14 @@ export async function deleteContact(id) {
   return false;
 }
 
-function set(contacts) {
+function set(contacts: unknown) {
   return localforage.setItem("contacts", contacts);
 }
 
 // fake a cache so we don't slow down stuff we've already seen
 let fakeCache = {};
 
-async function fakeNetwork(key) {
+async function fakeNetwork(key: string | undefined) {
   if (!key) {
     fakeCache = {};
   }
