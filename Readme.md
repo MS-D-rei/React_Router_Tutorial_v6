@@ -53,3 +53,25 @@ const router = useRouteError() as RouteError; // set type with 'as'
   <button type="submit">Delete</button>
 </Form>
 ```
+
+## useLoaderData is used to pass data through loader prop in router
+```ts
+// root.tsx, make loader function
+export async function loader() {
+  const contacts = await getContacts('');
+  return contacts;
+}
+// router.tsx, set the data to loader prop
+import { loader as rootLoader } from '@/components/routes/root';
+export const router = createBrowserRouter([
+  {
+    // ... other codes
+    loader: rootLoader, // (property) NonIndexRouteObject.loader?: LoaderFunction | undefined
+  }
+]);
+// root.tsx, get the data by useLoaderData()
+export default function Root() {
+  // useLoaderData() returns 'unknown' type. <= export declare function useLoaderData(): unknown;
+  const contacts = useLoaderData() as ContactType[];
+}
+```

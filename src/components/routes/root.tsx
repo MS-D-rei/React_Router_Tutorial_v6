@@ -5,7 +5,7 @@ import { getContacts } from '../Contacts';
 
 export async function loader() {
   const contacts = await getContacts('');
-  return { contacts };
+  return contacts;
 }
 
 interface rootLoaderData {
@@ -13,7 +13,7 @@ interface rootLoaderData {
 }
 
 export default function Root() {
-  const { contacts } = useLoaderData() as rootLoaderData;
+  const contacts = useLoaderData() as ContactType[];
   return (
     <>
       <div id="sidebar">
