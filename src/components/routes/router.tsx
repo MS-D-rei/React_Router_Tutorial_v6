@@ -7,6 +7,7 @@ import Root, {
 } from '@/components/routes/root';
 import EditContact, { editAction, editLoader } from '@/components/Edit';
 import { destroyAction } from '@/components/Destroy';
+import IndexRoutes from '@/components/IndexRoutes';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
     loader: rootLoader,
     action: rootAction,
     children: [
+      {
+        index: true,
+        element: <IndexRoutes />,
+      },
       {
         path: 'contacts/:contactId',
         element: <Contact />,

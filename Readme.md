@@ -171,6 +171,27 @@ export async function destroyAction({ params }: ActionFunctionArgs) {
 // root.tsx
 // navigation content
 /* {state: "submitting", location: {pathname: '/contacts/7v3xzj0/destroy', search: '', hash: '', state: null, key: 'i5lpfz45'} formAction: "/contacts/7v3xzj0/destroy", formData: FormData {}, formEncType: "application/x-www-form-urlencoded", formMethod: "post"} */
+```
 
-
+## Index routes { index: true, element: <IndexRoutes /> }
+```ts
+// router.tsx
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true, // render the element at '<Outlet />' when the path is exact to the parent path.
+        element: <IndexRoutes />,
+      },
+      {
+        path: 'contacts/:contactId',
+        element: <Contact />,
+        loader: contactLoader,
+      },
+    ],
+  },
+]);
 ```
