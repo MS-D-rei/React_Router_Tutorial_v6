@@ -49,7 +49,7 @@ export async function loader() {
 import { loader as rootLoader } from '@/components/routes/root';
 export const router = createBrowserRouter([
   {
-    // ... other codes
+    // ... other code
     loader: rootLoader, // (property) NonIndexRouteObject.loader?: LoaderFunction | undefined
   }
 ]);
@@ -89,7 +89,7 @@ export default Root() {
 import { action as rootAction,} from '@/components/routes/root';
 export const router = createBrowserRoute([
   {
-    // other codes,
+    // other code,
     action: rootAction,
   }
 ])
@@ -155,7 +155,7 @@ export const router = createBrowserRouter([
     loader: rootLoader,
     action: rootAction,
     children: [
-      // other codes
+      // other code
       {
         path: 'contacts/:contactId/destroy',
         action: destroyAction,
@@ -238,7 +238,6 @@ export default function Root() {
   return (
     <>
       <div id="sidebar">
-        <h1>React Router Contacts</h1>
         <div>
           <Form id="search-form" role="search">
             <input
@@ -254,12 +253,23 @@ export default function Root() {
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
           </Form>
-          // other codes
-        </div>
-        // other codes
-      </div>
-      // other codes
-    </>
-  );
-}
+          // other code
+```
+
+## Key stroke submitting cause history stack and solution for it.
+```ts
+// root.tsx
+  // existing code
+  <input id="q"
+    // existing code
+    onChange={(event) => {
+      const isFirstSearch = q == null;
+      // To solve history stack, set the option 'replace'
+      // Set true to replace the current entry in the browser's history stack instead of creating a new one
+      // (i.e. stay on "the same page"). Defaults to false.
+      submit(event.currentTarget.form, {
+        replace: !isFirstSearch,
+      });
+    }}
+  />
 ```

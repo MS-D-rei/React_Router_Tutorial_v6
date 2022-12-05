@@ -67,7 +67,13 @@ export default function Root() {
               name="q"
               defaultValue={q}
               onChange={(event) => {
-                submit(event.currentTarget.form);
+                const isFirstSearch = q == null;
+                // To solve history stack, set the option 'replace'
+                // Set true to replace the current entry in the browser's history stack instead of creating a new one
+                // (i.e. stay on "the same page"). Defaults to false.
+                submit(event.currentTarget.form, {
+                  replace: !isFirstSearch,
+                });
               }}
             />
             <div id="search-spinner" aria-hidden hidden={!isSearching} />
