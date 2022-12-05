@@ -6,6 +6,7 @@ import {
   redirect,
   useLoaderData,
   useNavigation,
+  useSubmit,
 } from 'react-router-dom';
 import { ContactType } from '@/components/ContactData';
 import { createContact, getContacts } from '@/components/Contacts';
@@ -34,7 +35,15 @@ export default function Root() {
   const navigation = useNavigation();
   console.log(navigation);
   /* {state: "idle", location: undefined, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined } */
-  /* {state: "loading", location: {pathname: '/contacts/1sslh8s', search: '', hash: '', state: null, key: '5w1p5ke8'}, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined */
+  /*
+  { state: "loading", location: {pathname: '/', search: '?q=John', hash: '', state: null, key: 'cyrjwyx5'}
+  formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined }
+   */
+  const submit = useSubmit();
+
+  const isSearching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
     if (q !== undefined) {
@@ -51,13 +60,17 @@ export default function Root() {
           <Form id="search-form" role="search">
             <input
               id="q"
+              className={isSearching ? 'loading' : ''}
               aria-label="Search contacts"
               placeholder="Search"
               type="search"
               name="q"
               defaultValue={q}
+              onChange={(event) => {
+                submit(event.currentTarget.form);
+              }}
             />
-            <div id="search-spinner" aria-hidden hidden={true} />
+            <div id="search-spinner" aria-hidden hidden={!isSearching} />
             <div className="sr-only" aria-live="polite"></div>
           </Form>
           <Form method="post">

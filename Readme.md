@@ -121,7 +121,10 @@ export default function Root() {
   // status idle example
   /* {state: "idle", location: undefined, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined } */
   // status loading example
-  /* {state: "loading", location: {pathname: '/contacts/1sslh8s', search: '', hash: '', state: null, key: '5w1p5ke8'}, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined */
+  /*
+  { state: "loading", location: {pathname: '/', search: '?q=John', hash: '', state: null, key: 'cyrjwyx5'}
+  formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined }
+   */
 }
 ```
 
