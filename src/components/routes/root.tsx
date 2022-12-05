@@ -1,5 +1,6 @@
 import {
   Form,
+  LoaderFunctionArgs,
   NavLink,
   Outlet,
   redirect,
@@ -8,14 +9,19 @@ import {
 } from 'react-router-dom';
 import { ContactType } from '@/components/ContactData';
 import { createContact, getContacts } from '@/components/Contacts';
+import { useEffect } from 'react';
 
 interface rootLoaderData {
-  [contacts: string]: ContactType[];
+  contacts: ContactType[];
+  // Change null to undefined for <input defaultValue> type checking
+  q: string | undefined;
 }
 
-export async function loader() {
-  const contacts = await getContacts('');
-  return { contacts };
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get('q');
+  const contacts = await getContacts(q);
+  return { contacts, q };
 }
 
 export async function action() {
@@ -24,28 +30,36 @@ export async function action() {
 }
 
 export default function Root() {
-  const { contacts } = useLoaderData() as rootLoaderData;
+  const { contacts, q } = useLoaderData() as rootLoaderData;
   const navigation = useNavigation();
   console.log(navigation);
   /* {state: "idle", location: undefined, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined } */
   /* {state: "loading", location: {pathname: '/contacts/1sslh8s', search: '', hash: '', state: null, key: '5w1p5ke8'}, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined */
+
+  useEffect(() => {
+    if (q !== undefined) {
+      const inputElement = document.getElementById('q') as HTMLInputElement;
+      inputElement.value = q;
+    }
+  }, [q]);
 
   return (
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
-          <form id="search-form" role="search">
+          <Form id="search-form" role="search">
             <input
               id="q"
               aria-label="Search contacts"
               placeholder="Search"
               type="search"
               name="q"
+              defaultValue={q}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
-          </form>
+          </Form>
           <Form method="post">
             <button type="submit">New</button>
           </Form>

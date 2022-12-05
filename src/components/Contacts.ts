@@ -3,7 +3,7 @@ import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
 import { ContactType } from "./ContactData";
 
-export async function getContacts(query: string | undefined) {
+export async function getContacts(query: string | null) {
   await fakeNetwork(`getContacts:${query}`);
   let contacts: ContactType[] | null = await localforage.getItem("contacts");
   if (!contacts) contacts = [];

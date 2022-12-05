@@ -195,3 +195,68 @@ export const router = createBrowserRouter([
   },
 ]);
 ```
+
+## Synchronizing URLs to Form state
+The URL and our form state are out of sync.
+1. If you click back after a search, the form field still has the value you entered even though the list is no longer filtered.
+2. If you refresh the page after searching, the form field no longer has the value in it, even though the list is filtered.
+=> Solution: set defaultValue={query} to input and use useEffect.
+
+```ts
+// root.tsx
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  // Send this q to Root
+  const q = url.searchParams.get('q');
+  const contacts = await getContacts(q);
+  return { contacts, q };
+}
+
+interface rootLoaderData {
+  contacts: ContactType[];
+  // Change null to undefined for <input defaultValue> type checking
+  q: string | undefined;
+}
+
+export default function Root() {
+  // Get q from loader function
+  const { contacts, q } = useLoaderData() as rootLoaderData;
+  const navigation = useNavigation();
+
+  // this useEffect solve problem No.1.
+  // when back to previous page, q will change and this useEffect change the input value.
+  useEffect(() => {
+    if (q !== undefined) {
+      const inputElement = document.getElementById('q') as HTMLInputElement;
+      inputElement.value = q;
+    }
+  }, [q]);
+
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <Form id="search-form" role="search">
+            <input
+              id="q"
+              aria-label="Search contacts"
+              placeholder="Search"
+              type="search"
+              name="q"
+              // set the q here
+              // this solve problem No.2
+              defaultValue={q}
+            />
+            <div id="search-spinner" aria-hidden hidden={true} />
+            <div className="sr-only" aria-live="polite"></div>
+          </Form>
+          // other codes
+        </div>
+        // other codes
+      </div>
+      // other codes
+    </>
+  );
+}
+```
