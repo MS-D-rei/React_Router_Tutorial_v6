@@ -20,7 +20,7 @@ export async function loader() {
 
 export async function action() {
   const contact = await createContact();
-  redirect(`/contacts/${contact.id}/edit`);
+  return redirect(`/contacts/${contact.id}/edit`);
 }
 
 export default function Root() {
