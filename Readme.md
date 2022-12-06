@@ -324,3 +324,37 @@ export async function contactAction({params, request}: ActionFunctionArgs) {
   })
 }
 ```
+
+## Optimistic UI
+```ts
+export default function Favorite({ contact }: FavoriteProps) {
+  const fetcher = useFetcher();
+  let favorite = contact.favorite;
+  
+  // when submitting, console.log(fetcher) shows as below
+  /* { state: "submitting", Form : {$$typeof: Symbol(react.forward_ref), render: ƒ}, data: undefined,
+  formAction: "/contacts/eyfs2g8", formData: FormData {}, formEncType: "application/x-www-form-urlencoded",
+  formMethod: "post", load: (href) => {…}, submit: ƒ (target, options) }
+  */
+  // if fetcher.formData.get('favorite') is 'true',
+  // use the 'true' as favorite value and show star button icon immediately
+
+  // When fetcher state is idle, fetcher.formData is undefined,
+  // so use actual favorite as the data to show star button icon.
+  if (fetcher.formData) {
+    favorite = fetcher.formData.get('favorite') === 'true';
+  }
+
+  return (
+    <fetcher.Form method="post">
+      <button
+        name="favorite"
+        value={favorite ? 'false' : 'true'}
+        aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+      >
+        {favorite ? '★' : '☆'}
+      </button>
+    </fetcher.Form>
+  );
+}
+```
