@@ -358,3 +358,44 @@ export default function Favorite({ contact }: FavoriteProps) {
   );
 }
 ```
+
+## Pathless Routes
+In case that we want to show error page inside the root outlet.
+```ts
+// Contact.tsx
+export async function loader({ params }: LoaderFunctionArgs) {
+  const contact = await getContact(params.contactId);
+  // When can expect data error possibility in loader or action,
+  // we can throw. And React Router catch it and avoid to render component
+  // and render error path
+  if (!contact) {
+    throw new Response('', {
+      status: 404,
+      statusText: 'Not Found',
+    });
+  }
+  return contact;
+}
+
+// router.tsx
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    // <Outlet /> shows this children
+    children: [
+      {
+        // can set without path
+        // all error that happens in this children will be caught
+        // by this errorElement (if the route doesn't have own errorElement)
+        // => <Outlet /> shows <ErrorPage />
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            element: <IndexRoutes />,
+          },
+```
