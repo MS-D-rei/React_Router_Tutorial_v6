@@ -33,7 +33,7 @@ export async function action() {
 export default function Root() {
   const { contacts, q } = useLoaderData() as rootLoaderData;
   const navigation = useNavigation();
-  console.log(navigation);
+  // console.log(navigation);
   /* {state: "idle", location: undefined, formAction: undefined, formData: undefined, formEncType: undefined, formMethod: undefined } */
   /*
   { state: "loading", location: {pathname: '/', search: '?q=John', hash: '', state: null, key: 'cyrjwyx5'}

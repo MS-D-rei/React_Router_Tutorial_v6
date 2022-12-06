@@ -273,3 +273,54 @@ export default function Root() {
     }}
   />
 ```
+
+## Favorite button data flow
+```ts
+// Favorite.tsx
+export default function Favorite({ contact }: FavoriteProps) {
+  // useFetcher interacts with route loaders and actions without causing a navigation.
+  // Great for any interaction that stays on the same page.
+  const fetcher = useFetcher();
+  const favorite = contact.favorite;
+  return (
+    <fetcher.Form method="post">
+      <button
+        // formData will have 'favorite' key
+        name="favorite"
+        // formData will have 'false' or 'true' value
+        value={favorite ? 'false' : 'true'}
+        aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+      >
+        {favorite ? '★' : '☆'}
+      </button>
+    </fetcher.Form>
+  );
+}
+
+// fetcher.Form action='' so send the data to where Favorite is rendered.
+// In this case, <Contact /> has <Favorite />. => path: 'contacts/:contactId'
+// And call the action.
+
+// router.tsx
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'contacts/:contactId',
+        element: <Contact />,
+        loader: contactLoader,
+        // This action will be called.
+        action: contactAction,
+      },
+
+// Contact.tsx
+export async function contactAction({params, request}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  return updateContact(params.contactId, {
+    favorite: formData.get('favorite') === 'true'
+  })
+}
+```

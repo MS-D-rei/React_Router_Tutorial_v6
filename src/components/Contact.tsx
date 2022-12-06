@@ -1,7 +1,7 @@
-import { Form, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
+import { ActionFunctionArgs, Form, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 import { ContactType } from '@/components/ContactData';
 import Favorite from '@/components/Favorite';
-import { getContact } from '@/components/Contacts';
+import { getContact, updateContact } from '@/components/Contacts';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   /*
@@ -11,6 +11,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
   // console.log(params);
   /* {contactId: '1sslh8s'} */
   return getContact(params.contactId);
+}
+
+export async function contactAction({params, request}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  return updateContact(params.contactId, {
+    favorite: formData.get('favorite') === 'true'
+  })
 }
 
 export default function Contact() {
