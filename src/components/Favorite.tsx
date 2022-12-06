@@ -7,7 +7,7 @@ interface FavoriteProps {
 
 export default function Favorite({ contact }: FavoriteProps) {
   const fetcher = useFetcher();
-  console.log(fetcher);
+  // console.log(fetcher);
   let favorite = contact.favorite;
   
   if (fetcher.formData) {
